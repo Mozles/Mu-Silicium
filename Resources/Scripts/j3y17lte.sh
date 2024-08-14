@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Build an Android kernel that is actually UEFI disguised as the Kernel
-cat ./BootShim/AARCH64/BootShim.bin "./Build/j3y17ltePkg/${_TARGET_BUILD_MODE}_CLANGPDB/FV/J3Y17LTE_UEFI.fd" > "./Resources/bootpayload.bin"||exit 1
+cat ./BootShim/AARCH64/BootShim.bin "./Build/j3y17ltePkg/${_TARGET_BUILD_MODE}_CLANGPDB/FV/J3Y17LTE_UEFI.fd" > "./Build/j3y17ltePkg/${_TARGET_BUILD_MODE}_CLANGPDB/FV/J3Y17LTE_UEFI.fd-bootshim"||exit 1
+#gzip -c < "./Build/j3y17ltePkg/${_TARGET_BUILD_MODE}_CLANGPDB/FV/J3Y17LTE_UEFI.fd-bootshim" > "./Build/j3y17ltePkg/${_TARGET_BUILD_MODE}_CLANGPDB/FV/J3Y17LTE_UEFI.fd-bootshim.gz"||exit 1
+cat "./Build/j3y17ltePkg/${_TARGET_BUILD_MODE}_CLANGPDB/FV/J3Y17LTE_UEFI.fd-bootshim" ./Resources/DTBs/j3y17lte/*.dtb > ./Resources/bootpayload.bin||exit 1
 
 # Create a Bootable Android Boot Image
 python3 ./Resources/Scripts/mkbootimg.py \
@@ -14,7 +16,8 @@ python3 ./Resources/Scripts/mkbootimg.py \
   --os_patch_level "$(date '+%Y-%m')" \
   --header_version 1 \
   -o "boot.img" \
-  ||_error "\nFailed to create Android Boot Image!\n"
+  ||_error "\nFailed to create Android Boot Image!\n"s
+
 
 # Compress Boot Image in a tar File for Odin/heimdall Flash
 tar -c boot.img -f Mu-j3y17lte.tar||exit 1

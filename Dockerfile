@@ -10,7 +10,8 @@ COPY .docker /app
 RUN sed -i 's/pip install/pip install --break-system-packages/' /app/setup_env.sh
 RUN /bin/sh -c "cd /app && ./setup_env.sh -p apt"
 
-RUN useradd -u $(id -u) dockeruser || useradd -u 1000 dockeruser
+RUN useradd -d /home/dockeruser -u $(id -u) dockeruser || useradd -u 1000 dockeruser
+RUN install -d -m 0744 -o dockeruser /home/dockeruser
 USER dockeruser
 
 WORKDIR /app
@@ -22,3 +23,4 @@ LABEL maintainer="Dani Ash <d4n1.551@gmail.com>" \
       edk2-builder="latest"
 
 ENTRYPOINT [ "/app/build_uefi.sh" ]
+#ENTRYPOINT /bin/bash

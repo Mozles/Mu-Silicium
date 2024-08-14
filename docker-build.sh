@@ -12,4 +12,4 @@ IMG_NAME="mu_builder:$VERSION"
 docker build -t "$IMG_NAME" .
 
 # run the actual build in the container
-docker run --rm -it -v $REPO:/app "$IMG_NAME"
+docker run --rm -it -v $REPO:/app "$IMG_NAME" $@

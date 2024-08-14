@@ -20,7 +20,11 @@ gDeviceMemoryDescriptorEx[] = {
     {"Display Reserved",  0x67000000, 0x00800000, AddMem, MEM_RES, SYS_MEM_CAP, Reserv, WRITE_THROUGH},
   // Memory Hole: 0xBBC00000 -> 0xC0000000 (0x04400000)
 
-  {"Display Reserved",   0x67000000, 0x0124B000, AddMem, MEM_RES, SYS_MEM_CAP, Reserv, WRITE_THROUGH},
+  {"Gic Distributor",    0x104E1000, 0x00001000, AddDev, MMAP_IO, UNCACHEABLE, MmIO,   NS_DEVICE},
+  {"Gic Redistributors", 0x104E2000, 0x00006000, AddDev, MMAP_IO, UNCACHEABLE, MmIO,   NS_DEVICE},
+  //{"Gic InterruptInterface", 0x104E8000, 0x00006000, AddDev, MMAP_IO, UNCACHEABLE, MmIO,   NS_DEVICE},
+ 
+
   // Terminator for MMU
   {"Terminator", 0, 0, 0, 0, 0, 0, 0}
 };

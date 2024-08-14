@@ -6,14 +6,12 @@ RUN apt update -y && \
 
 RUN ln -s /usr/bin/env /usr/bin/sudo
 
-COPY . /app
+COPY .docker /app
 RUN sed -i 's/pip install/pip install --break-system-packages/' /app/setup_env.sh
 RUN /bin/sh -c "cd /app && ./setup_env.sh -p apt"
 
-# Create an executable bash script /runasuser.sh
-COPY ./.docker/runasuser.sh /runasuser.sh
-
-RUN chmod +x /runasuser.sh
+RUN useradd -u $(id -u) dockeruser || useradd -u 1000 dockeruser
+USER dockeruser
 
 WORKDIR /app
 
@@ -22,3 +20,5 @@ LABEL maintainer="Dani Ash <d4n1.551@gmail.com>" \
       description="Image for EDK2 development with necessary tools" \
       version="latest" \
       edk2-builder="latest"
+
+ENTRYPOINT [ "/app/build_uefi.sh" ]

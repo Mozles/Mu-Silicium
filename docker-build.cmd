@@ -15,6 +15,6 @@ set "IMG_NAME=mu_builder:!VERSION!"
 docker build -t "!IMG_NAME!" .
 
 :: Run the Docker container
-docker run --rm -it -v "%REPO%:/app" "!IMG_NAME!" /runasuser.sh --uid 1000 --command "./build_uefi.sh %*"
+docker run --rm -it -v "%REPO%:/app" "!IMG_NAME!"
 
 endlocal

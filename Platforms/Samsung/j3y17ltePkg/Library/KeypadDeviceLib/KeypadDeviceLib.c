@@ -222,21 +222,22 @@ KeypadDeviceConstructor ()
     // Configure keys
     /// Volume Up Button
     StaticContext              = KeypadKeyCodeToKeyContext (115);
-    StaticContext->PinctrlBase = 0x139F0000;
-    StaticContext->BankOffset  = 0x0;
-    StaticContext->Pin         = 0x3;
+    StaticContext->PinctrlBase = 0x139F0000;      // Based on GPIO phandle for the volume up button
+    StaticContext->BankOffset  = 0x48;       // BankOffset remains unchanged
+    StaticContext->Pin         = 0x07;      // GPIO pin number for the volume up button
 
     /// Volume Down Button
     StaticContext              = KeypadKeyCodeToKeyContext (116);
-    StaticContext->PinctrlBase = 0x139F0000;
-    StaticContext->BankOffset  = 0x0;
-    StaticContext->Pin         = 0x4;
+    StaticContext->PinctrlBase = 0x139F0000;      // Based on GPIO phandle for the volume down button
+    StaticContext->BankOffset  = 0x18;       // BankOffset remains unchanged
+    StaticContext->Pin         = 0x03;      // GPIO pin number for the volume down button
 
-    /// Power Button
+    /// Power Button (mapped to Home button in DTS)
     StaticContext              = KeypadKeyCodeToKeyContext (117);
-    StaticContext->PinctrlBase = 0x139F0000;
-    StaticContext->BankOffset  = 0x0;
-    StaticContext->Pin         = 0x4;
+    StaticContext->PinctrlBase = 0x139F0000;      // Based on GPIO phandle for the home (power) button
+    StaticContext->BankOffset  = 0x48;       // BankOffset remains unchanged
+    StaticContext->Pin         = 0x04;      // GPIO pin number for the home (power) button
+
   } else {
     DEBUG ((EFI_D_ERROR, "%a: Failed to Locate Exynos GPIO Protocol! Status = %r\n", __FUNCTION__, Status));
   }
@@ -276,7 +277,7 @@ KeypadDeviceGetKeys (
     KEY_CONTEXT_PRIVATE *Context    = KeyList[Index];
 
     IsPressed = !mGpioProtocol->GetPin ((ExynosGpioBank *)Context->PinctrlBase, Context->BankOffset, Context->Pin);
-
+    DEBUG ((DEBUG_INFO, "Button Pressed\n"));
     LibKeyUpdateKeyStatus (&Context->EfiKeyContext, KeypadReturnApi, IsPressed, Delta);
   }
 

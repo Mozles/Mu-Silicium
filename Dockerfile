@@ -15,6 +15,7 @@ RUN install -d -m 0744 -o dockeruser /home/dockeruser
 USER dockeruser
 
 WORKDIR /app
+RUN git config --global safe.directory '*'
 
 # Label the image
 LABEL maintainer="Dani Ash <d4n1.551@gmail.com>" \

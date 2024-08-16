@@ -84,7 +84,7 @@ GetPin (
 
   // Get current Pin State
   Value = MmioRead32 ((UINTN)&Bank->Dat + Offset);
-
+   DEBUG ((DEBUG_INFO, "Pin Triggered " + Pin + "\n"));
   // Return Pin State
   return (Value & DAT_MASK(Pin));
 }
